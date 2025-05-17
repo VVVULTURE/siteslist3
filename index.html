@@ -98,9 +98,22 @@
       btnDiv.style.display = 'block';
       backBtn.style.display = fsBtn.style.display = 'none';
     };
-    fsBtn.onclick = ()=>{
+
+    fsBtn.onclick = () => {
       const ifr = appDiv.querySelector('iframe');
-      if (ifr) ifr.requestFullscreen?.();
+      if (ifr) {
+        if (ifr.requestFullscreen) {
+          ifr.requestFullscreen();
+        } else if (ifr.webkitRequestFullscreen) {
+          ifr.webkitRequestFullscreen();
+        } else if (ifr.mozRequestFullScreen) {
+          ifr.mozRequestFullScreen();
+        } else if (ifr.msRequestFullscreen) {
+          ifr.msRequestFullscreen();
+        } else {
+          alert("Fullscreen not supported in this browser.");
+        }
+      }
     };
 
     function openApp(url) {
