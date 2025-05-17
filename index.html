@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Launcher Page</title>
+  <style>
+    html, body { margin:0; padding:0; height:100%; overflow:hidden; background:#000; font-family: Arial, sans-serif; }
+    #backgroundCanvas { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; }
+    #ui { position:relative; z-index:1; height:100%; overflow-y:auto; box-sizing:border-box; padding:20px; }
+    #buttons button {
+      display:block; width:100%; max-width:400px; margin:10px auto;
+      padding:10px; font-size:16px;
+      background: linear-gradient(45deg,#00bfae,#808080); color:#fff;
+      border:none; border-radius:30px; cursor:pointer; transition:background .3s;
+    }
+    #buttons button:hover { background:linear-gradient(45deg,#008f8f,#6c6c6c); }
+    #back, #fs { max-width:150px; display:none; }
+    #app { width:100%; height:calc(100vh - 40px); }
+    iframe { width:100%; height:100%; border:none; }
+  </style>
+</head>
+<body>
+  <canvas id="backgroundCanvas"></canvas>
+  <div id="ui">
+    <button id="back">Back</button>
+    <button id="fs">Fullscreen</button>
+    <div id="buttons">
+      <!-- New additions -->
+      <button onclick="openApp('https://termina1.vercel.app/')">Termina Loader</button>
+      <button onclick="openApp('https://webretro-tawny.vercel.app/')">Webretro Emulator</button>
+      <button onclick="openApp('https://nano.koyeb.app')">NANO</button>
+      <button onclick="openApp('https://mapss-zeta.vercel.app/')">Maps</button>
+
+      <!-- Existing entries -->
+      <button onclick="openApp('https://cobalt-titanium.koyeb.app')">Open Cobalt</button>
+      <button onclick="openApp('https://equinox-opal.vercel.app')">Open Equinox</button>
+      <button onclick="openApp('https://interstellarfork-bay.vercel.app')">Open Interstellar</button>
+      <button onclick="openApp('https://math-class-school.vercel.app')">Open Eaglercraft 1.12.2</button>
+      <button onclick="openApp('https://eagler1-8-8-wasm-gc.vercel.app/')">Open Eaglercraft 1.8.8</button>
+      <button onclick="openLegacy()">Open Legacy Executor</button>
+      <button onclick="openApp('https://agar-io-clone-s9z3.onrender.com')">Open Agar.io</button>
+      <button onclick="openApp('https://redgale.github.io/mathgames67.github.io/')">Open Classroom 6x</button>
+      <button onclick="openApp('https://emulator-js-six.vercel.app/')">Open EmulatorJS</button>
+      <button onclick="openTermia()">Open Termia Mini</button>
+      <button onclick="openApp('https://redgale7-chatcli.hf.space')">Open RedAI</button>
+      <button onclick="openApp('https://eagler-o4ug.onrender.com')">Start Eaglercraft Frontend</button>
+      <button onclick="launchBadMonday()">Launch Bad Monday Sim</button>
+      <button onclick="launchCookieClicker()">Open Cookie Clicker</button>
+    </div>
+    <div id="app"></div>
+  </div>
+
+  <script>
+    // --- Starfield & UI logic (unchanged) ---
+    const canvas = document.getElementById('backgroundCanvas'),
+          ctx    = canvas.getContext('2d');
+    let stars = [], numStars = 150, mouse = {x:-100,y:-100};
+
+    function resizeCanvas() {
+      canvas.width = innerWidth; canvas.height = innerHeight;
+      stars = [];
+      for (let i=0; i<numStars; i++) {
+        stars.push({
+          x: Math.random()*canvas.width,
+          y: Math.random()*canvas.height,
+          r: Math.random()*1.5+0.5,
+          dx: (Math.random()-0.5)*0.5,
+          dy: (Math.random()-0.5)*0.5
+        });
+      }
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    (function animateStars(){
+      requestAnimationFrame(animateStars);
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      stars.forEach(s=>{
+        let dx=s.x-mouse.x, dy=s.y-mouse.y, d=Math.hypot(dx,dy);
+        if (d<80) {
+          let a=Math.atan2(dy,dx), f=(80-d)/80;
+          s.dx+=Math.cos(a)*f; s.dy+=Math.sin(a)*f;
+        }
+        s.dx*=0.96; s.dy*=0.96; s.x+=s.dx; s.y+=s.dy;
+        if (s.x<0) s.x+=canvas.width; else if (s.x>canvas.width) s.x-=canvas.width;
+        if (s.y<0) s.y+=canvas.height; else if (s.y>canvas.height) s.y-=canvas.height;
+        ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,2*Math.PI); ctx.fillStyle='#FFF'; ctx.fill();
+      });
+    })();
+    window.addEventListener('mousemove', e=>{ mouse.x=e.clientX; mouse.y=e.clientY; });
+
+    const backBtn = document.getElementById('back'),
+          fsBtn   = document.getElementById('fs'),
+          btnDiv  = document.getElementById('buttons'),
+          appDiv  = document.getElementById('app');
+
+    backBtn.onclick = ()=>{
+      appDiv.innerHTML = '';
+      btnDiv.style.display = 'block';
+      backBtn.style.display = fsBtn.style.display = 'none';
+    };
+    fsBtn.onclick = ()=>{
+      const ifr = appDiv.querySelector('iframe');
+      if (ifr) ifr.requestFullscreen?.();
+    };
+
+    function openApp(url) {
+      btnDiv.style.display = 'none';
+      backBtn.style.display = fsBtn.style.display = 'block';
+      appDiv.innerHTML = `<iframe src="${url}"></iframe>`;
+    }
+    function openTermia() {
+      window.open('https://drive.google.com/drive/folders/1SakjNzY0Q8cwEPVMgUNxfeY_WrmoCvJr?usp=sharing','_blank');
+    }
+    function openLegacy() { /* ... */ }
+    function launchBadMonday() { /* ... */ }
+    function launchCookieClicker() { /* ... */ }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // UI is already visible immediately
+    });
+  </script>
+</body>
+</html>
