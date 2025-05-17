@@ -7,14 +7,32 @@
     html, body { margin:0; padding:0; height:100%; overflow:hidden; background:#000; font-family: Arial, sans-serif; }
     #backgroundCanvas { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; }
     #ui { position:relative; z-index:1; height:100%; overflow-y:auto; box-sizing:border-box; padding:20px; }
-    #buttons button {
-      display:block; width:100%; max-width:400px; margin:10px auto;
-      padding:10px; font-size:16px;
-      background: linear-gradient(45deg,#00bfae,#808080); color:#fff;
-      border:none; border-radius:30px; cursor:pointer; transition:background .3s;
+
+    #buttons button,
+    #back,
+    #fs {
+      display:block;
+      width:100%;
+      max-width:400px;
+      margin:10px auto;
+      padding:10px;
+      font-size:16px;
+      background: linear-gradient(45deg,#00bfae,#808080);
+      color:#fff;
+      border:none;
+      border-radius:30px;
+      cursor:pointer;
+      transition:background .3s;
     }
-    #buttons button:hover { background:linear-gradient(45deg,#008f8f,#6c6c6c); }
-    #back, #fs { max-width:150px; display:none; }
+
+    #buttons button:hover,
+    #back:hover,
+    #fs:hover {
+      background:linear-gradient(45deg,#008f8f,#6c6c6c);
+    }
+
+    #back, #fs { display:none; }
+
     #app { width:100%; height:calc(100vh - 40px); }
     iframe { width:100%; height:100%; border:none; }
   </style>
