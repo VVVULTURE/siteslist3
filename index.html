@@ -43,20 +43,18 @@
     <button id="back">Back</button>
     <button id="fs">Fullscreen</button>
     <div id="buttons">
-      <!-- New additions -->
+      <!-- App buttons -->
       <button onclick="openApp('https://termina1.vercel.app/')">Termina Loader</button>
       <button onclick="openApp('https://webretro-tawny.vercel.app/')">Webretro Emulator</button>
       <button onclick="openApp('https://nano.koyeb.app')">NANO</button>
       <button onclick="openApp('https://mapss-zeta.vercel.app/')">Maps</button>
-
-      <!-- Existing entries -->
       <button onclick="openApp('https://cobalt-titanium.koyeb.app')">Open Cobalt</button>
       <button onclick="openApp('https://equinox-opal.vercel.app')">Open Equinox</button>
       <button onclick="openApp('https://interstellarfork-bay.vercel.app')">Open Interstellar</button>
-	  <button onclick="openApp('https://blonde-eda-vadenjonas-ccb8f592.koyeb.app/')">Open Ultraviolet</button>
+      <button onclick="openApp('https://blonde-eda-vadenjonas-ccb8f592.koyeb.app/')">Open Ultraviolet</button>
       <button onclick="openApp('https://math-class-school.vercel.app')">Open Eaglercraft 1.12.2</button>
       <button onclick="openApp('https://eagler1-8-8-wasm-gc.vercel.app/')">Open Eaglercraft 1.8.8</button>
-	  <button onclick="openApp('https://legacy-executer-proto.vercel.app/')">Legacy Executer 2</button>
+      <button onclick="openApp('https://legacy-executer-proto.vercel.app/')">Legacy Executer 2</button>
       <button onclick="openApp('https://agar-io-clone-s9z3.onrender.com')">Open Agar.io</button>
       <button onclick="openApp('https://redgale.github.io/mathgames67.github.io/')">Open Classroom 6x</button>
       <button onclick="openApp('https://emulator-js-six.vercel.app/')">Open EmulatorJS</button>
@@ -69,50 +67,60 @@
   </div>
 
   <script>
-    // --- Starfield & UI logic (unchanged) ---
+    // --- Starfield background ---
     const canvas = document.getElementById('backgroundCanvas'),
-          ctx    = canvas.getContext('2d');
-    let stars = [], numStars = 150, mouse = {x:-100,y:-100};
+          ctx = canvas.getContext('2d');
+    let stars = [], numStars = 150, mouse = {x: -100, y: -100};
 
     function resizeCanvas() {
-      canvas.width = innerWidth; canvas.height = innerHeight;
+      canvas.width = innerWidth;
+      canvas.height = innerHeight;
       stars = [];
-      for (let i=0; i<numStars; i++) {
+      for (let i = 0; i < numStars; i++) {
         stars.push({
-          x: Math.random()*canvas.width,
-          y: Math.random()*canvas.height,
-          r: Math.random()*1.5+0.5,
-          dx: (Math.random()-0.5)*0.5,
-          dy: (Math.random()-0.5)*0.5
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: Math.random() * 1.5 + 0.5,
+          dx: (Math.random() - 0.5) * 0.5,
+          dy: (Math.random() - 0.5) * 0.5
         });
       }
     }
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    (function animateStars(){
+    (function animateStars() {
       requestAnimationFrame(animateStars);
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      stars.forEach(s=>{
-        let dx=s.x-mouse.x, dy=s.y-mouse.y, d=Math.hypot(dx,dy);
-        if (d<80) {
-          let a=Math.atan2(dy,dx), f=(80-d)/80;
-          s.dx+=Math.cos(a)*f; s.dy+=Math.sin(a)*f;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      stars.forEach(s => {
+        let dx = s.x - mouse.x, dy = s.y - mouse.y, d = Math.hypot(dx, dy);
+        if (d < 80) {
+          let a = Math.atan2(dy, dx), f = (80 - d) / 80;
+          s.dx += Math.cos(a) * f;
+          s.dy += Math.sin(a) * f;
         }
-        s.dx*=0.96; s.dy*=0.96; s.x+=s.dx; s.y+=s.dy;
-        if (s.x<0) s.x+=canvas.width; else if (s.x>canvas.width) s.x-=canvas.width;
-        if (s.y<0) s.y+=canvas.height; else if (s.y>canvas.height) s.y-=canvas.height;
-        ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,2*Math.PI); ctx.fillStyle='#FFF'; ctx.fill();
+        s.dx *= 0.96; s.dy *= 0.96;
+        s.x += s.dx; s.y += s.dy;
+        if (s.x < 0) s.x += canvas.width; else if (s.x > canvas.width) s.x -= canvas.width;
+        if (s.y < 0) s.y += canvas.height; else if (s.y > canvas.height) s.y -= canvas.height;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, 2 * Math.PI);
+        ctx.fillStyle = '#FFF';
+        ctx.fill();
       });
     })();
-    window.addEventListener('mousemove', e=>{ mouse.x=e.clientX; mouse.y=e.clientY; });
+
+    window.addEventListener('mousemove', e => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
 
     const backBtn = document.getElementById('back'),
-          fsBtn   = document.getElementById('fs'),
-          btnDiv  = document.getElementById('buttons'),
-          appDiv  = document.getElementById('app');
+          fsBtn = document.getElementById('fs'),
+          btnDiv = document.getElementById('buttons'),
+          appDiv = document.getElementById('app');
 
-    backBtn.onclick = ()=>{
+    backBtn.onclick = () => {
       appDiv.innerHTML = '';
       btnDiv.style.display = 'block';
       backBtn.style.display = fsBtn.style.display = 'none';
@@ -138,18 +146,12 @@
     function openApp(url) {
       btnDiv.style.display = 'none';
       backBtn.style.display = fsBtn.style.display = 'block';
-      appDiv.innerHTML = `<iframe src="${url}"></iframe>`;
+      appDiv.innerHTML = `<iframe src="${url}" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-presentation allow-modals allow-downloads allow-top-navigation allow-pointer-lock allow-storage-access-by-user-activation allow-fullscreen" allowfullscreen></iframe>`;
     }
+
     function openTermia() {
       window.open('https://drive.google.com/drive/folders/1SakjNzY0Q8cwEPVMgUNxfeY_WrmoCvJr?usp=sharing','_blank');
     }
-    function openLegacy() { /* ... */ }
-    function launchBadMonday() { /* ... */ }
-    function launchCookieClicker() { /* ... */ }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      // UI is already visible immediately
-    });
   </script>
 </body>
 </html>
